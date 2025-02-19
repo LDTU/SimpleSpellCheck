@@ -3,6 +3,7 @@ import axios from "axios";
 
 const SpellCheck = () => {
     const [referenceText, setReferenceText] = useState("");
+    const [language, setLanguage] = useState("english");
     const [recording, setRecording] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
     const [transcribedText, setTranscribedText] = useState("");
@@ -24,7 +25,7 @@ const SpellCheck = () => {
             };
 
             mediaRecorder.onstop = () => {
-                const audioBlob = new Blob(chunksRef.current, { type: "audio/wav" });
+                const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
                 setAudioBlob(audioBlob);
                 chunksRef.current = [];
             };
@@ -56,8 +57,9 @@ const SpellCheck = () => {
         }
 
         const formData = new FormData();
-        formData.append("file", audioBlob, "audio.wav");
+        formData.append("file", audioBlob, "audio.webm");
         formData.append("reference_text", referenceText);
+        formData.append("language", language);
 
         try {
             const response = await axios.post("http://localhost:5000/upload", formData, {
@@ -76,6 +78,8 @@ const SpellCheck = () => {
         <div style={{ textAlign: "center", padding: "20px" }}>
             <h2>SpellCheck</h2>
 
+            <br /><br />
+
             <label>
                 <strong>Nhập câu cần đọc:</strong>
             </label>
@@ -83,7 +87,7 @@ const SpellCheck = () => {
                 type="text"
                 value={referenceText}
                 onChange={(e) => setReferenceText(e.target.value)}
-                placeholder="Nhập câu tiếng Anh..."
+                placeholder="Nhập câu..."
                 style={{ margin: "10px", padding: "5px", width: "80%" }}
             />
 
