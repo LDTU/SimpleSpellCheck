@@ -1,1 +1,1 @@
-A simple spell english checker 
+A simple spell english checker using whisper 
